@@ -18,10 +18,10 @@ My initial plan is
   - WS-2812B LEDs
   - speaker
   - maybe bluetooth speaker
+- show Fritzing diagrams and schematics
+  - explain switch sensing using a water-flow analogy
 - have some other arduino projects to show
   - Persistence of Vision
   - Rubber Band Gun
   - Graduation Caps
   - Version 0.1 of the Halloween Skull with Eyeballs
-- show Fritzing diagrams and schematics
-  - explain switch sensing using a water-flow analogy
