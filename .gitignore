@@ -50,3 +50,8 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# mdo choices
+#  Microsoft Office has too much personal info; hard to remember to remove it
+*.ppt*
+*.doc*
