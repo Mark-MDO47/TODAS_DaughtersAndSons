@@ -55,3 +55,4 @@ dkms.conf
 #  Microsoft Office has too much personal info; hard to remember to remove it
 *.ppt*
 *.doc*
+~*.*
