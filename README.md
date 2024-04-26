@@ -44,3 +44,4 @@ My initial plan is
 | | | | |
 | 4 | YX5200/DFPlayer sound player | $3 | amazon.com / dfrobot.com |
 | 4 | small speaker| $3 | amazon.com |
+| 4 | bananas, apples, grapes, tomatoes, aluminum foil | N/A | misc |
