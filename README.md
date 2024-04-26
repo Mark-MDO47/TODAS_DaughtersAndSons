@@ -28,7 +28,7 @@ My initial plan is
   - Version 0.1 of the Halloween Skull with Eyeballs
 
 # Parts List
-| Project | Part | Recent Approx. Price | Source used |
+| Project | Part | Recent Approx. Price | Source |
 | --- | --- | --- | --- |
 | 1, 2, 3, 4 | Solderless Breadboard | $2 | protosupplies.com |
 | 1, 2 | Button | ~ $0.10 | amazon.com |
