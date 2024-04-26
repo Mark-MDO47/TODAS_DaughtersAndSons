@@ -10,16 +10,10 @@
 //    Nano pin D-10    MEASURE_PIN_03
 //    Nano pin D-11    MEASURE_PIN_04
 //
-// HC-SR04 Ultrasonic Range Detector
-//   Nano pin 5V      SR04 VCC
-//   Nano pin GND     SR04 GND
-//   Nano pin D-2     SR04 Trig
-//   Nano pin D-3     SR04 Echo
-//
 // YX5200/DFPlayer Sound Player
-//   Nano pin D-4     YX5200 TX; Arduino RX
-//   Nano pin D-5     YX5200 RX; Arduino TX
-//   Nano pin D-6     YX5200 BUSY; HIGH when audio finishes
+//   Nano pin D-2     YX5200 TX; Arduino RX
+//   Nano pin D-3     YX5200 RX; Arduino TX
+//   Nano pin D-4     YX5200 BUSY; HIGH when audio finishes
 
 // The core capacitive sensing algorithm is from https://playground.arduino.cc/Code/CapacitiveSensor/
 // I put the original readCapacitivePin()into 04_readCapacitivePin.* and broke it into two parts
@@ -36,8 +30,6 @@
 
 
 #include "Arduino.h"              // general Arduino definitions plus uint8_t etc.
-
-#include <Ultrasonic.h>           // HC-SR04 Ultrasonic Rane Detector
 
 #include "SoftwareSerial.h"       // to talk to myDFPlayer without using up debug (HW) serial port
 #include "DFRobotDFPlayerMini.h"  // to communicate with the YX5200 audio player
@@ -85,17 +77,6 @@ uint8_t gPatternNumberChanged = 0; // non-zero if need to change pattern number
 #else  // no DFPRINTDETAIL
   #define DFprintDetail(type, value) // nothing at all
 #endif // #if DFPRINTDETAIL
-
-////////////////////////////////////////////////////////////////////////////////////////
-// definitions for HC_SR04 Ultrasonic Range Detector
-#define ULTRA_TRIG_PIN 12 // HW - HC-SR04 Trigger digital pin output
-#define ULTRA_ECHO_PIN 10 // HW - HC-SR04 Trigger digital echo pin input
-#define ULTRA_CM_PER_REGION 9     // SW - HC-SR04 every this many CM is a different pattern
-#define ULTRA_IGNORE_INITIAL_CM 3 // SW - HC-SR04 ignore the first 3 CM since valid range starts at 2 CM
-int gUltraDistance = 0; // latest measured distance in centimeters
-// instantiate my HC-SR04 data object
-Ultrasonic my_ultra = Ultrasonic(ULTRA_TRIG_PIN, ULTRA_ECHO_PIN); // default timeout is 20 milliseconds
-
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 #if DFPRINTDETAIL
@@ -266,23 +247,50 @@ void DFsetup() {
 } // end DFsetup()
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-// handle_ultra() - process HC-SR04 data.
-//    returns: pattern number 0 <= num <= PATTERN_MAX_NUM
-//
+// CapacitiveSetup() - Initialize and calibrate capacitive "switches".
+void CapacitiveSetup() {
+  pinsetup_t* ptr_pin_setup;
+  uint16_t cal_max; // NOTE that these are bigger than uint8_t so can easily compute max+3
+  uint16_t cal_return;
 
-int handle_ultra() {
-  int pattern; // integer pattern number from 0 thru 5 inclusive
-  // get the range reading from the Ultrasonic sensor in centimeters
-  int ultra_dist;
-  
-  gUltraDistance= (my_ultra.read(CM));
-    ultra_dist = gUltraDistance - ULTRA_IGNORE_INITIAL_CM;
-  if (ultra_dist < 0) ultra_dist = 0;
-  pattern = ultra_dist / ULTRA_CM_PER_REGION;
-  if (pattern > 5) pattern = 5;
+  for (uint8_t i = 0; i < NUM_MEASURE_PINS; i++) {
+    // get the internal Arduino info to do fast capacitive measurements on this pin
+    ptr_pin_setup = readCapacitivePinSetup(pins2measure[i]);
+    pin_setup_array[i].port    = ptr_pin_setup->port;
+    pin_setup_array[i].ddr     = ptr_pin_setup->ddr;
+    pin_setup_array[i].pin     = ptr_pin_setup->pin;
+    pin_setup_array[i].bitmask = ptr_pin_setup->bitmask;
 
-  return(pattern);
-} // end handle_ultra()
+    // calibrate this pin while not being touched
+    cal_max = 0;
+    for (uint8_t j = 0; j < 20; j++) {
+      cal_return = readCapacitivePin(&pin_setup_array[i]);
+      if (cal_return > cal_max) { cal_max = cal_return; }
+    } // end for calibration
+    if (255 >= (cal_max+MEASURE_GUARD)) {
+      pin_setup_array[i].calibration = cal_max + MEASURE_GUARD;
+    } else {
+      pin_setup_array[i].calibration = 255; // maximum value
+    } // end if to limit calibration setting
+  } // end for pin setup
+
+  #if DEBUG_CAPACITIVE_SETUP
+  Serial.println("DEBUG_CAPACITIVE_SETUP");
+  Serial.print("sizeof(pin_setup_array[0]) "); Serial.println(sizeof(pin_setup_array[0]));
+  Serial.println(" ");
+  for (uint8_t i = 0; i < NUM_MEASURE_PINS; i++) {
+    Serial.print("pins2measure[i] "); Serial.println(pins2measure[i]);
+    Serial.print("pin_setup_array[i].port "); Serial.println(*pin_setup_array[i].port);
+    Serial.print("pin_setup_array[i].ddr "); Serial.println(*pin_setup_array[i].ddr);
+    Serial.print("pin_setup_array[i].pin "); Serial.println(*pin_setup_array[i].pin);
+    Serial.print("pin_setup_array[i].bitmask 0x"); Serial.println(pin_setup_array[i].bitmask,HEX);
+    Serial.print("pin_setup_array[i].calibration "); Serial.println(pin_setup_array[i].calibration);
+    Serial.println(" ");
+  }
+  #endif // DEBUG_CAPACITIVE_SETUP
+
+  Serial.println("CapacitiveSetup() complete...");
+} // end CapacitiveSetup()
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // setup()
@@ -298,44 +306,7 @@ void setup() {
   // initialize the YX5200 DFPlayer audio player
   DFsetup();
 
-  pinsetup_t* ptr_pin_setup;
-  uint16_t cal_max; // NOTE that these are bigger than uint8_t so can easily compute max+3
-  uint16_t cal_return;
-  for (uint8_t i = 0; i < NUM_MEASURE_PINS; i++) {
-    // get the internal Arduino info to do fast capacitive measurements on our pins
-    ptr_pin_setup = readCapacitivePinSetup(pins2measure[i]);
-    pin_setup_array[i].port    = ptr_pin_setup->port;
-    pin_setup_array[i].ddr     = ptr_pin_setup->ddr;
-    pin_setup_array[i].pin     = ptr_pin_setup->pin;
-    pin_setup_array[i].bitmask = ptr_pin_setup->bitmask;
-
-    // calibrate this pin when not being touched
-    cal_max = 0;
-    for (uint8_t j = 0; j < 20; j++) {
-      cal_return = readCapacitivePin(&pin_setup_array[i]);
-      if (cal_return > cal_max) { cal_max = cal_return; }
-    }
-    if (255 >= (cal_max+MEASURE_GUARD)) {
-      pin_setup_array[i].calibration = cal_max + MEASURE_GUARD;
-    } else {
-      pin_setup_array[i].calibration = 255; // maximum value
-    }
-  }
-
-#if DEBUG_CAPACITIVE_SETUP
-  Serial.println("DEBUG_CAPACITIVE_SETUP");
-  Serial.print("sizeof(pin_setup_array[0]) "); Serial.println(sizeof(pin_setup_array[0]));
-  Serial.println(" ");
-  for (uint8_t i = 0; i < NUM_MEASURE_PINS; i++) {
-    Serial.print("pins2measure[i] "); Serial.println(pins2measure[i]);
-    Serial.print("pin_setup_array[i].port "); Serial.println(*pin_setup_array[i].port);
-    Serial.print("pin_setup_array[i].ddr "); Serial.println(*pin_setup_array[i].ddr);
-    Serial.print("pin_setup_array[i].pin "); Serial.println(*pin_setup_array[i].pin);
-    Serial.print("pin_setup_array[i].bitmask 0x"); Serial.println(pin_setup_array[i].bitmask,HEX);
-    Serial.print("pin_setup_array[i].calibration "); Serial.println(pin_setup_array[i].calibration);
-    Serial.println(" ");
-  }
-#endif // DEBUG_CAPACITIVE_SETUP
+  CapacitiveSetup();
 
   Serial.println("TODAS init complete...");
 } // end setup()
