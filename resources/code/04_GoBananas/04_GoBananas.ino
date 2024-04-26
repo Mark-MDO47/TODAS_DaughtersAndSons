@@ -30,6 +30,8 @@
 #define MEASURE_PIN_03 10
 #define MEASURE_PIN_04 11
 
+#define MEASURE_GUARD 1 // amount greater than calibration to call it a touch
+
 static int pins2measure[NUM_MEASURE_PINS] = { MEASURE_PIN_01, MEASURE_PIN_02, MEASURE_PIN_03, MEASURE_PIN_04 };
 static pinsetup_t pin_setup_array[NUM_MEASURE_PINS];
 
@@ -58,10 +60,10 @@ void setup() {
       cal_return = readCapacitivePin(&pin_setup_array[i]);
       if (cal_return > cal_max) { cal_max = cal_return; }
     }
-    if (255 >= (cal_max+3)) {
-      pin_setup_array[i].calibration = cal_max+3;
+    if (255 >= (cal_max+MEASURE_GUARD)) {
+      pin_setup_array[i].calibration = cal_max + MEASURE_GUARD;
     } else {
-      pin_setup_array[i].calibration = 255;
+      pin_setup_array[i].calibration = 255; // maximum value
     }
   }
 
@@ -82,5 +84,21 @@ void setup() {
 } // end setup()
 
 void loop() {
-  
+  uint8_t measured_value;
+  static int active_pin = -1; // none touched
+
+  // pay attention to the first pin touched
+  for (uint8_t i = 0; i < NUM_MEASURE_PINS; i++) {
+    measured_value = readCapacitivePin(&pin_setup_array[i]);
+    if (measured_value > pin_setup_array[i].calibration) {
+      if (i != active_pin) {
+        Serial.print("Start touch pin#"); Serial.print(i); Serial.print(" D"); Serial.println(pins2measure[i]);
+        active_pin = i;
+      }
+      break;
+    } else if (i == active_pin) {
+      Serial.print("End touch pin#"); Serial.print(i); Serial.print(" D"); Serial.println(pins2measure[i]);
+      active_pin = -1; // none touched now
+    } // end if
+  } // end for loop
 } // end loop()
