@@ -34,17 +34,18 @@ My initial plan is
 | 1, 2 | Button | ~ $0.10 | amazon.com |
 | 1, 2, 3 | 200 Ohm resistor | ~ $0.10 | digikey.com |
 | 1 | LED | ~ $0.10 | amazon.com |
-| | | | |
+| 1, 2, 3, 4 | Wires, clips, etc. | N/A | misc |
+| *** | *** | *** | *** |
 | 2, 3, 4 | Arduino Nano | $3 | aliexpress.com |
 | 2 | WS2812B RGB 8-LED Strip | $2 | protosupplies.com |
-| | | | |
+| *** | *** | *** | *** |
 | 3 | WS2812B RGB 241-LED Disk  | $26 | amazon.com |
 | 3 | HC-SR04 Sonar Range Detector | $2 | protosupplies.com |
 | 3 | Button top 18650 Rechargeable Batteries | $5 each | amazon.com |
 | 3 | UBEC 3Amp | $5 | amazon.com |
-| | | | |
+| *** | *** | *** | *** |
 | 4 | 1K Ohm resistor, 1/4 watt | $1 | digikey.com |
 | 4 | YX5200/DFPlayer sound player | $3 | amazon.com / dfrobot.com |
 | 4 | SD Card | $6 | amazon.com |
-| 4 | small speaker| $3 | amazon.com |
-| 4 | bananas, apples, grapes, tomatoes, aluminum foil | N/A | misc |
+| 4 | Small speaker| $3 | amazon.com |
+| 4 | Bananas, apples, grapes, tomatoes, aluminum foil | N/A | misc |
