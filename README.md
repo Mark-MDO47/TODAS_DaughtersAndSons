@@ -3,6 +3,8 @@ Take our Daughters and Sons to Work Day June 2024
 
 At work we are having a take a child to work day and I will be running an Arduino table with a target age range of 9-16 and a time range for each group of one hour.
 
+See https://github.com/Mark-MDO47/TODAS_DaughtersAndSons/blob/master/TODAS_DaughtersAndSons.pdf for details
+
 My initial plan is
 - use Arduinos and breadboards
   - have them do some of the connections
