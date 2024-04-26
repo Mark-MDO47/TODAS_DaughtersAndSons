@@ -28,18 +28,18 @@ My initial plan is
   - Version 0.1 of the Halloween Skull with Eyeballs
 
 # Parts List
-| Project | Part | Recent Cost | Source used |
+| Project | Part | Recent Approx. Price | Source used |
 | --- | --- | --- | --- |
-| 1 | Solderless Breadboard | < $2 | protosupplies.com |
+| 1 | Solderless Breadboard | $2 | protosupplies.com |
 | 1 | Button | ~ $0.10 | amazon.com |
 | 1 | 200 Ohm resistor | ~ $0.10 | digikey.com |
 | 1 | LED | ~ $0.10 | amazon.com |
 | | | | |
-| 2 | Arduino Nano | $2.35 | aliexpress.com |
-| 2 | WS2812B RGB 8-LED Strip | < $2 | protosupplies.com |
+| 2 | Arduino Nano | $3 | aliexpress.com |
+| 2 | WS2812B RGB 8-LED Strip | $2 | protosupplies.com |
 | | | | |
 | 3 | 24l LED WS2812B | $26 |amazon.com |
-| 3 | HC-SR04 Sonar Range Detector | < $2 | protosupplies.com |
+| 3 | HC-SR04 Sonar Range Detector | $2 | protosupplies.com |
 | | | | |
 | 4 | YX5200/DFPlayer sound player | $3 | amazon.com / dfrobot.com |
 | 4 | small speaker| $3 | amazon.com |
