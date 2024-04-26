@@ -39,8 +39,8 @@ My initial plan is
 | 2, 3, 4 | Arduino Nano | $3 | aliexpress.com |
 | 2 | WS2812B RGB 8-LED Strip | $2 | protosupplies.com |
 | *** | *** | *** | *** |
-| 3 | WS2812B RGB 241-LED Disk  | $26 | amazon.com |
 | 3 | HC-SR04 Sonar Range Detector | $2 | protosupplies.com |
+| 3 | WS2812B RGB 241-LED Disk  | $26 | amazon.com |
 | 3 | Button top 18650 Rechargeable Batteries | $5 each | amazon.com |
 | 3 | UBEC 3Amp | $5 | amazon.com |
 | *** | *** | *** | *** |
