@@ -49,5 +49,5 @@ My initial plan is
 | 4 | SD or TF Card w/o adapter | $5 | amazon.com |
 | 4 | Small speaker| $3 | amazon.com |
 | 4 | Bananas, apples, grapes, tomatoes, aluminum foil | N/A | misc |
-| 4 | Bananaphone by Raffi (Music Download) | $10 | amazon.com |
+| 4 | Bananaphone by Raffi (Music Download) (optional) | $10 | amazon.com |
 
