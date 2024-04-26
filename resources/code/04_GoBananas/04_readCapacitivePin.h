@@ -21,7 +21,7 @@
 //   PLAN - maybe fast enough as is. If not must try it both ways and evaluate.
 
 #include "pins_arduino.h"
-#include "arduino.h"
+#include "Arduino.h"
 
 typedef struct {
   volatile uint8_t* port;   // AVR PORT
