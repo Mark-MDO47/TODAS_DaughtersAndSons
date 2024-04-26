@@ -28,6 +28,7 @@ My initial plan is
   - Rubber Band Gun - https://github.com/Mark-MDO47/RubberBandGun
   - Graduation Caps - https://github.com/Mark-MDO47/GraduationCap2017
   - Version 0.1 of the Halloween Skull with Eyeballs - https://github.com/Mark-MDO47/HalloweenEyes
+  - Voice controlled Christmas tree lights - https://github.com/Mark-MDO47/ArduinoClass/blob/master/FablabChristmasArduinoTable_2023.pdf
 
 # Parts List
 | Project | Part | Recent Approx. Price | Source |
