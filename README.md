@@ -38,7 +38,7 @@ My initial plan is
 | 2 | Arduino Nano | $3 | aliexpress.com |
 | 2 | WS2812B RGB 8-LED Strip | $2 | protosupplies.com |
 | | | | |
-| 3 | 24l LED WS2812B | $26 |amazon.com |
+| 3 | WS2812B RGB 24l-LED Disk  | $26 |amazon.com |
 | 3 | HC-SR04 Sonar Range Detector | $2 | protosupplies.com |
 | | | | |
 | 4 | YX5200/DFPlayer sound player | $3 | amazon.com / dfrobot.com |
