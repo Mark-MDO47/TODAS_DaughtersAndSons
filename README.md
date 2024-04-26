@@ -46,6 +46,6 @@ My initial plan is
 | *** | *** | *** | *** |
 | 4 | 1K Ohm resistor, 1/4 watt | $1 | digikey.com |
 | 4 | YX5200/DFPlayer sound player | $3 | amazon.com / dfrobot.com |
-| 4 | SD Card | $6 | amazon.com |
+| 4 | SD Card w/o adapter | $5 | amazon.com |
 | 4 | Small speaker| $3 | amazon.com |
 | 4 | Bananas, apples, grapes, tomatoes, aluminum foil | N/A | misc |
