@@ -42,7 +42,7 @@ My initial plan is
 | 3 | HC-SR04 Sonar Range Detector | $2 | protosupplies.com |
 | 3 | WS2812B RGB 241-LED Disk  | $26 | amazon.com |
 | 3 | Button top 18650 Rechargeable Batteries | $5 each | amazon.com |
-| 3 | UBEC 3Amp | $5 | amazon.com |
+| 3 | UBEC (Universal Battery Eliminator Circuit) 3-Amp | $5 | amazon.com |
 | *** | *** | *** | *** |
 | 4 | 1K Ohm resistor, 1/4 watt | $1 | digikey.com |
 | 4 | YX5200/DFPlayer sound player | $3 | amazon.com / dfrobot.com |
