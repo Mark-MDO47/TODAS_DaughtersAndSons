@@ -67,9 +67,9 @@ void DFsetup();                                                // how to initial
 #define SOUND_ACTIVE_PROTECT 200  // milliseconds to keep SW twiddled sound active after doing myDFPlayer.play(mySound)
 uint32_t state_timerForceSoundActv = 0;  // end timer for enforcing SOUND_ACTIVE_PROTECT
 // our current sound pattern number
-uint8_t gCurrentPatternNumber = 0; // Index number of which pattern is current
-uint8_t gPrevPattern = SOUNDNUM_INVALID; // previous pattern number (invalid)
-uint8_t gPatternNumberChanged = 0; // non-zero if need to change pattern number
+uint8_t gCurrentPinIndex = 0; // Index number of which pattern is current
+uint8_t gPrevPinIndex = SOUNDNUM_INVALID; // previous pattern number (invalid)
+uint8_t gPinIndexChanged = 0; // non-zero if need to change pattern number
 #define DFCHANGEVOLUME 0 // zero does not change sound
 // #define DFPRINTDETAIL 1 // if need detailed status from myDFPlayer (YX5200 communications)
 #define DFPRINTDETAIL 0  // will not print detailed status from myDFPlayer
@@ -200,18 +200,18 @@ void DFcheckSoundDone() {
   uint8_t myBusy = (HIGH != digitalRead(DPIN_AUDIO_BUSY)) || (millis() < state_timerForceSoundActv);
   uint8_t playNumber = SOUNDNUM_INVALID; // this means don't change
 
-  if (0 != gPatternNumberChanged) { // always start new pattern number sound
-    playNumber = gCurrentPatternNumber+1; // sound numbers start at 1
+  if (0 != gPinIndexChanged) { // always start new pattern number sound
+    playNumber = gCurrentPinIndex+1; // sound numbers start at 1
     if (SOUNDNUM_INTRO == playNumber) {
       DFstartSound(SOUNDNUM_INTRO, SOUND_BKGRND_VOL);
     } else {
-      DFstartSound(gCurrentPatternNumber+1, SOUND_DEFAULT_VOL);
+      DFstartSound(gCurrentPinIndex+1, SOUND_DEFAULT_VOL);
     }
-    gPatternNumberChanged = 0;
+    gPinIndexChanged = 0;
   } else {
     if (!myBusy) {
-      gCurrentPatternNumber = SOUNDNUM_INVALID;
-      gPatternNumberChanged = 0;
+      gCurrentPinIndex = SOUNDNUM_INVALID;
+      gPinIndexChanged = 0;
     }
   }
 } // end DFcheckSoundDone()
@@ -330,11 +330,17 @@ void setup() {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // loop()
 void loop() {
-  EVERY_N_MILLISECONDS( 200 ) { gCurrentPatternNumber = handle_capacitive(); }
-  if ((gCurrentPatternNumber != -1) && (gPrevPattern != gCurrentPatternNumber)) {
-    gPrevPattern = gCurrentPatternNumber;
-    gPatternNumberChanged = 1;
-    DFstartSound(gCurrentPatternNumber+1, SOUND_DEFAULT_VOL);
+  EVERY_N_MILLISECONDS( 200 ) { gCurrentPinIndex = handle_capacitive(); }
+  if (gPrevPinIndex != gCurrentPinIndex) {
+    if (gCurrentPinIndex != -1) {
+      gPrevPinIndex = gCurrentPinIndex;
+      gPinIndexChanged = 1;
+      DFstartSound(gCurrentPinIndex+1, SOUND_DEFAULT_VOL);
+    } else {
+      gPrevPinIndex = SOUNDNUM_INVALID;
+      gPinIndexChanged = 1;
+      DFstartSound(gCurrentPinIndex+1, SOUND_DEFAULT_VOL);
+    }
   } // end if
   DFcheckSoundDone();
 } // end loop()
