@@ -15,22 +15,40 @@
 //   Nano pin D-3     YX5200 RX; Arduino TX
 //   Nano pin D-4     YX5200 BUSY; HIGH when audio finishes
 
+// The idea is to play an intro sound completely, then switch to a mode where switch-on starts a sound
+//     and all-switches-off starts the "silence" sound.
+//   At first I did my usual over-complicated approach with state machines etc., basing it off previous
+//     over-complicated code that I had debugged for the Arduino Class.
+//   But then I remembered to KISS - Keep It Simple Stupid.
+//   The entire idea is to have the processing of the capacitive switches recognizable by a 9 year old
+//     after exposure to electronics and C-language for 45 minutes.
+//   So the intro sound will play to completion in the "setup()" time, then the "loop()" code will
+//     immediately start the requested sound or silence as needed.
+//   Thus the "loop()" code will be as simple as possible - and no simpler! It still needs to know if
+//     the current switches state is a change.
+// My DFstartSound() routine will be used to stop anything that is playing and start the selected sound
+//     (either silence or the sound selected for the channel).
+//   When a sound completes, DFcheckSoundDone() will switch to the silence sound.
+//   The state of the previous sound will be exposed to the "loop()" code so it can be discussed.
+
 // The core capacitive sensing algorithm is from https://playground.arduino.cc/Code/CapacitiveSensor/
 // I put the original readCapacitivePin()into 04_readCapacitivePin.* and broke it into two parts
 //   readCapacitivePinSetup() - get the bitmasks and do any initialization that can be done
 //   readCapacitivePin() - similar to before but different calling sequence
-// This approach seems to work well for our TODAS course.
+// The basic approach from the "Arduino playground" seems to work well for our TODAS course environment.
+//   There were no functional changes to the code. An adult touching a banana seems to increase the
+//   "capacitance count" by about 5 to 7.
+// I added to the "setup()" code calibration for each channel, but even that is probably not needed.
 
 // See https://github.com/Mark-MDO47/AudioPlayer-YX5200 for details on using the YX5200/DFPlayer.
 //   I usually install a copy of the DFRobot.com DFPlayer code when using it, since I did a lot
 //   of debugging to find how to use it on all the variants of the YX5200 I have seen.
-//   These DFRobot.com DFPlayer code files are DFRobotDFPlayerMini.*.
+//   The still unmodified DFRobot.com DFPlayer code files are DFRobotDFPlayerMini.*.
 //   LICENSE_for_DFRobot_code.txt shows it is OK to do this and describes the legal boundaries
 //   for correct usage.
 
-
 #include "Arduino.h"              // general Arduino definitions plus uint8_t etc.
-#include <FastLED.h>              // only for the convenient EVERY_N_MILLISECONDS() macro
+#include <FastLED.h>              // only for the convenient EVERY_N_MILLISECONDS() macro - too lazy to write my own...
 
 #include "SoftwareSerial.h"       // to talk to myDFPlayer without using up debug (HW) serial port
 #include "DFRobotDFPlayerMini.h"  // to communicate with the YX5200 audio player
