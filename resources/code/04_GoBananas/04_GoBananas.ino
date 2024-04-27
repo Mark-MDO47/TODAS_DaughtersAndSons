@@ -1,6 +1,8 @@
 // 04_GoBananas
 // Author: https://github.com/Mark-MDO47/
 //
+// This sets up 4 "keys" that use capacitive sensing to activate.
+// The idea is to react similar to a piano, but have selectable sounds per key.
 
 // connections:
 //
@@ -15,8 +17,8 @@
 //   Nano pin D-3     YX5200 RX; Arduino TX
 //   Nano pin D-4     YX5200 BUSY; HIGH when audio finishes
 
-// The idea is to play an intro sound completely, then switch to a mode where switch-on starts a sound
-//     and all-switches-off starts the "silence" sound.
+// The idea is to play an intro sound completely, then switch to a mode where "key"-on starts a sound
+//     and all-keys-off starts the "silence" sound.
 //   At first I did my usual over-complicated approach with state machines etc., basing it off previous
 //     over-complicated code that I had debugged for the Arduino Class.
 //   But then I remembered to KISS - Keep It Simple Stupid.
@@ -25,10 +27,11 @@
 //   So the intro sound will play to completion in the "setup()" time, then the "loop()" code will
 //     immediately start the requested sound or silence as needed.
 //   Thus the "loop()" code will be as simple as possible - and no simpler! It still needs to know if
-//     the current switches state is a change.
+//     the current key state is a change.
 // My DFstartSound() routine will be used to stop anything that is playing and start the selected sound
 //     (either silence or the sound selected for the channel).
-//   When a sound completes, DFcheckSoundDone() will switch to the silence sound.
+//   When a sound completes, DFcheckSoundDone() will return non-zero and the "loop()" code can start
+//     the silence sound.
 //   The state of the previous sound will be exposed to the "loop()" code so it can be discussed.
 
 // The core capacitive sensing algorithm is from https://playground.arduino.cc/Code/CapacitiveSensor/
@@ -79,16 +82,18 @@ SoftwareSerial mySoftwareSerial(/*rx =*/DPIN_SWSRL_RX, /*tx =*/DPIN_SWSRL_TX); /
 DFRobotDFPlayerMini myDFPlayer;                                // to talk to YX5200 audio player
 void DFsetup();                                                // how to initialize myDFPlayer
 #define SOUNDNUM_INVALID 254 // invalid soundnum
-#define SOUNDNUM_INTRO   7   // our introduction sound - optional snippet of "Bananaphone" by Raffi
+#define SOUNDNUM_INTRO   1   // our introduction sound - optional snippet of "Bananaphone" by Raffi
+#define SOUNDNUM_SILENCE 2   // the sound of silence
+#define SOUNDNUM_C       3   // simple musical tone "C"
+#define SOUNDNUM_D       4   // simple musical tone "D"
+#define SOUNDNUM_E       5   // simple musical tone "E"
+#define SOUNDNUM_F       6   // simple musical tone "F"
 #define SOUND_DEFAULT_VOL     25  // default volume - 25 is pretty good
 #define SOUND_BKGRND_VOL      20  // background volume
 #define SOUND_ACTIVE_PROTECT 200  // milliseconds to keep SW twiddled sound active after doing myDFPlayer.play(mySound)
-uint32_t state_timerForceSoundActv = 0;  // end timer for enforcing SOUND_ACTIVE_PROTECT
-// our current sound pattern number
-uint8_t gCurrentPinIndex = 0; // Index number of which pattern is current
-uint8_t gPrevPinIndex = SOUNDNUM_INVALID; // previous pattern number (invalid)
-uint8_t gPinIndexChanged = 0; // non-zero if need to change pattern number
-#define DFCHANGEVOLUME 0 // zero does not change sound
+uint32_t gTimerForceSoundActv = 0;  // SOUND_ACTIVE_PROTECT until millis() >= this
+
+#define DFCHANGEVOLUME 0 // zero does not change sound volume
 // #define DFPRINTDETAIL 1 // if need detailed status from myDFPlayer (YX5200 communications)
 #define DFPRINTDETAIL 0  // will not print detailed status from myDFPlayer
 #if DFPRINTDETAIL // routine to do detailed debugging
@@ -96,6 +101,22 @@ uint8_t gPinIndexChanged = 0; // non-zero if need to change pattern number
 #else  // no DFPRINTDETAIL
   #define DFprintDetail(type, value) // nothing at all
 #endif // #if DFPRINTDETAIL
+
+
+// "pin index" state:
+//   -1 means nothing selected
+//   0-3 (3 = NUM_MEASURE_PINS-1) represent pins MEASURE_PIN_01 to MEASURE_PIN_03,
+//   any other value is invalid
+int8_t gCurrentPinIndex = -1; // Index number of which pin is current - nothing selected
+int8_t gPrevPinIndex = -1; // previous pattern number - nothing selected
+uint8_t gPinIndexChanged = 0; // non-zero if need to change pattern number
+
+// "pin index" to sound mapping
+//    pin index goes from -1 to 3 (3 = NUM_MEASURE_PINS-1)
+//    we add one to that number to go from 0 to 4
+//       0 = Silence sound
+//       1 through 4 = MEASURE_PIN_01 through MEASURE_PIN_04
+uint16_t gPinIndex2SoundNum[1+NUM_MEASURE_PINS] = { SOUNDNUM_SILENCE, SOUNDNUM_C, SOUNDNUM_D, SOUNDNUM_E, SOUNDNUM_F };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 #if DFPRINTDETAIL
@@ -152,6 +173,26 @@ void DFprintDetail(uint8_t type, int value){
 #endif // DFPRINTDETAIL
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
+// pin2soundnum(pinIndex) - convert pin index to sound number
+//
+// pinIndex to sound mapping
+//    pinIndex goes from -1 to 3 (3 = NUM_MEASURE_PINS-1)
+//    we add one to that number to go from 0 to 4
+//       0 = Silence sound
+//       1 through 4 = MEASURE_PIN_01 through MEASURE_PIN_04
+
+uint16_t pin2soundnum(int8_t pinIndex) {
+  uint16_t soundNum = SOUNDNUM_INVALID;
+  if ((pinIndex >= -1) and (pinIndex < NUM_MEASURE_PINS)) {
+    soundNum = gPinIndex2SoundNum[pinIndex+1];
+  } else {
+    Serial.print("ERROR pin2soundnum() - pinIndex="); Serial.print(pinIndex); Serial.println(" INVALID");
+    soundNum = SOUNDNUM_INVALID; // not really needed
+  }
+  return(pinIndex);
+} // end pin2soundnum()
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
 // DFstartSound(tmpSoundNum, tmpVolume) - start tmpSoundNum if it is valid
 //
 // tmpSoundNum is the sound file number.
@@ -190,7 +231,7 @@ void  DFstartSound(uint16_t tmpSoundNum, uint16_t tmpVolume) {
 
   myDFPlayer.play(mySound); //play specific wav in SD: root directory ###.wav; number played is physical copy order; first one copied is 1
   // Serial.print(F("DEBUG DFstartSound myDFPlayer.play(")); Serial.print((uint16_t) mySound); Serial.println(F(")"));
-  state_timerForceSoundActv = millis() + SOUND_ACTIVE_PROTECT; // handle YX5200 problem with interrupting play
+  gTimerForceSoundActv = millis() + SOUND_ACTIVE_PROTECT; // handle YX5200 problem with interrupting play
 
   if (init_minmax) {
     init_minmax -= 1;
@@ -208,30 +249,16 @@ void  DFstartSound(uint16_t tmpSoundNum, uint16_t tmpVolume) {
 } // end DFstartSound()
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-// DFcheckSoundDone()
+// DFcheckSoundDone() - returns TRUE if previous sound is complete (DFPlayer/YX5200 is notBusy)
 //
-// notBusy means (HIGH == digitalRead(DPIN_AUDIO_BUSY)) && (millis() >= state_timerForceSoundActv)
-//    DPIN_AUDIO_BUSY goes HIGH when sound finished, but may take a while to start
-//    state_timerForceSoundActv is millisec count we have to wait for to before checking DPIN_AUDIO_BUSY
+// notBusy means (HIGH == digitalRead(DPIN_AUDIO_BUSY)) && (millis() >= gTimerForceSoundActv)
 //
-void DFcheckSoundDone() {
-  uint8_t myBusy = (HIGH != digitalRead(DPIN_AUDIO_BUSY)) || (millis() < state_timerForceSoundActv);
-  uint8_t playNumber = SOUNDNUM_INVALID; // this means don't change
-
-  if (0 != gPinIndexChanged) { // always start new pattern number sound
-    playNumber = gCurrentPinIndex+1; // sound numbers start at 1
-    if (SOUNDNUM_INTRO == playNumber) {
-      DFstartSound(SOUNDNUM_INTRO, SOUND_BKGRND_VOL);
-    } else {
-      DFstartSound(gCurrentPinIndex+1, SOUND_DEFAULT_VOL);
-    }
-    gPinIndexChanged = 0;
-  } else {
-    if (!myBusy) {
-      gCurrentPinIndex = SOUNDNUM_INVALID;
-      gPinIndexChanged = 0;
-    }
-  }
+//    DPIN_AUDIO_BUSY goes HIGH when sound finished, but may take a while to start being high after sound starts
+//    gTimerForceSoundActv is millisec count we have to wait for to before checking DPIN_AUDIO_BUSY
+//    so we have to be BOTH (DPIN_AUDIO_BUSY is HIGH) AND (current time is beyond gTimerForceSoundActv)
+//
+uint8_t DFcheckSoundDone() {
+  return (HIGH == digitalRead(DPIN_AUDIO_BUSY)) && (millis() >= gTimerForceSoundActv);
 } // end DFcheckSoundDone()
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -257,7 +284,7 @@ void DFsetup() {
 } // end DFsetup()
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-// CapacitiveSetup() - Initialize and calibrate capacitive "switches".
+// CapacitiveSetup() - Initialize and calibrate capacitive "keys".
 void CapacitiveSetup() {
   pinsetup_t* ptr_pin_setup;
   uint16_t cal_max; // NOTE that these are bigger than uint8_t so can easily compute max+3
@@ -305,7 +332,7 @@ void CapacitiveSetup() {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // handle_capacitive()
 //   returns -1 if nothing selected
-//   else return index (0 <= index < NUM_MEASURE_PINS) of first active capacitive "switch"
+//   else return index (0 <= index < NUM_MEASURE_PINS) of first active capacitive "key"
 // 
 int handle_capacitive() {
   uint8_t measured_value;
@@ -348,17 +375,22 @@ void setup() {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // loop()
 void loop() {
-  EVERY_N_MILLISECONDS( 200 ) { gCurrentPinIndex = handle_capacitive(); }
-  if (gPrevPinIndex != gCurrentPinIndex) {
-    if (gCurrentPinIndex != -1) {
+  EVERY_N_MILLISECONDS( 50 ) { 
+    gCurrentPinIndex = handle_capacitive(); }
+    if (gPrevPinIndex != gCurrentPinIndex) {
+      // "key" (PinIndex) is different than before so start a new sound
+      //    -1 will start the silent sound, otherwise the chosen key sound will start
       gPrevPinIndex = gCurrentPinIndex;
-      gPinIndexChanged = 1;
-      DFstartSound(gCurrentPinIndex+1, SOUND_DEFAULT_VOL);
-    } else {
-      gPrevPinIndex = SOUNDNUM_INVALID;
-      gPinIndexChanged = 1;
-      DFstartSound(gCurrentPinIndex+1, SOUND_DEFAULT_VOL);
-    }
-  } // end if
-  DFcheckSoundDone();
+      DFstartSound(pin2soundnum(gCurrentPinIndex), SOUND_DEFAULT_VOL);
+    } else if (DFcheckSoundDone()) {
+      if (gCurrentPinIndex >= 0) {
+        // PinIndex is not -1 so we are still holding a key down - restart sound
+        gPrevPinIndex = gCurrentPinIndex;
+        DFstartSound(pin2soundnum(gCurrentPinIndex), SOUND_DEFAULT_VOL);
+      } else {
+        // PinIndex is -1 so we no key is held down - start silence sound
+        gCurrentPinIndex = gPrevPinIndex = -1;
+        DFstartSound(pin2soundnum(gCurrentPinIndex), SOUND_DEFAULT_VOL);
+    } // end if
+  } // end of EVERY_N_MILLISECONDS
 } // end loop()
