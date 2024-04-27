@@ -30,6 +30,7 @@
 
 
 #include "Arduino.h"              // general Arduino definitions plus uint8_t etc.
+#include <FastLED.h>              // only for the convenient EVERY_N_MILLISECONDS() macro
 
 #include "SoftwareSerial.h"       // to talk to myDFPlayer without using up debug (HW) serial port
 #include "DFRobotDFPlayerMini.h"  // to communicate with the YX5200 audio player
@@ -59,15 +60,15 @@ SoftwareSerial mySoftwareSerial(/*rx =*/DPIN_SWSRL_RX, /*tx =*/DPIN_SWSRL_TX); /
               // SoftwareSerial(rxPin,                 txPin,       inverse_logic)
 DFRobotDFPlayerMini myDFPlayer;                                // to talk to YX5200 audio player
 void DFsetup();                                                // how to initialize myDFPlayer
-#define SOUNDNUM_INTRO   7 // our introduction sound - optional snippet of "Bananaphone" by Raffi
+#define SOUNDNUM_INVALID 254 // invalid soundnum
+#define SOUNDNUM_INTRO   7   // our introduction sound - optional snippet of "Bananaphone" by Raffi
 #define SOUND_DEFAULT_VOL     25  // default volume - 25 is pretty good
 #define SOUND_BKGRND_VOL      20  // background volume
 #define SOUND_ACTIVE_PROTECT 200  // milliseconds to keep SW twiddled sound active after doing myDFPlayer.play(mySound)
 uint32_t state_timerForceSoundActv = 0;  // end timer for enforcing SOUND_ACTIVE_PROTECT
-uint8_t state_introSoundPlaying = 1; // we start with the intro sound
 // our current sound pattern number
 uint8_t gCurrentPatternNumber = 0; // Index number of which pattern is current
-uint8_t gPrevPattern = 254; // previous pattern number (not present)
+uint8_t gPrevPattern = SOUNDNUM_INVALID; // previous pattern number (invalid)
 uint8_t gPatternNumberChanged = 0; // non-zero if need to change pattern number
 #define DFCHANGEVOLUME 0 // zero does not change sound
 // #define DFPRINTDETAIL 1 // if need detailed status from myDFPlayer (YX5200 communications)
@@ -169,7 +170,7 @@ void  DFstartSound(uint16_t tmpSoundNum, uint16_t tmpVolume) {
 #endif // DFPRINTDETAIL
 #endif // DFCHANGEVOLUME
 
-  myDFPlayer.play(mySound); //play specific mp3 in SD: root directory ###.mp3; number played is physical copy order; first one copied is 1
+  myDFPlayer.play(mySound); //play specific wav in SD: root directory ###.wav; number played is physical copy order; first one copied is 1
   // Serial.print(F("DEBUG DFstartSound myDFPlayer.play(")); Serial.print((uint16_t) mySound); Serial.println(F(")"));
   state_timerForceSoundActv = millis() + SOUND_ACTIVE_PROTECT; // handle YX5200 problem with interrupting play
 
@@ -197,31 +198,22 @@ void  DFstartSound(uint16_t tmpSoundNum, uint16_t tmpVolume) {
 //
 void DFcheckSoundDone() {
   uint8_t myBusy = (HIGH != digitalRead(DPIN_AUDIO_BUSY)) || (millis() < state_timerForceSoundActv);
-  uint8_t playNumber = 99; // this means don't change
+  uint8_t playNumber = SOUNDNUM_INVALID; // this means don't change
 
-  if (0 != state_introSoundPlaying) { // intro still playing
-    if (0 == myBusy) { // can play a non-intro sound
-      if (0 != gPatternNumberChanged) { // start pattern sound
-        playNumber = gCurrentPatternNumber+1; // sound numbers start at 1
-      } else { // start intro sound
-        playNumber = SOUNDNUM_INTRO; // this should never execute, we start with gPatternNumberChanged=1
-      } // end start a sound
-    } // end if can play a non-intro sound
-  } else { // intro done
-    if (0 != gPatternNumberChanged) { // always start new pattern number sound
-      playNumber = gCurrentPatternNumber+1; // sound numbers start at 1
-    }
-  } // end if intro done
-
-  if (99 != playNumber) { // there is a new sound to play
-    gPatternNumberChanged = 0;
-    state_introSoundPlaying = 0;
+  if (0 != gPatternNumberChanged) { // always start new pattern number sound
+    playNumber = gCurrentPatternNumber+1; // sound numbers start at 1
     if (SOUNDNUM_INTRO == playNumber) {
       DFstartSound(SOUNDNUM_INTRO, SOUND_BKGRND_VOL);
     } else {
       DFstartSound(gCurrentPatternNumber+1, SOUND_DEFAULT_VOL);
     }
-  } // end if there is a new sound to play
+    gPatternNumberChanged = 0;
+  } else {
+    if (!myBusy) {
+      gCurrentPatternNumber = SOUNDNUM_INVALID;
+      gPatternNumberChanged = 0;
+    }
+  }
 } // end DFcheckSoundDone()
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -293,6 +285,30 @@ void CapacitiveSetup() {
 } // end CapacitiveSetup()
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
+// handle_capacitive()
+//   returns -1 if nothing selected
+//   else return index (0 <= index < NUM_MEASURE_PINS) of first active capacitive "switch"
+// 
+int handle_capacitive() {
+  uint8_t measured_value;
+  static int active_pin_index = -1; // none touched
+  // pay attention to the first pin touched
+  for (uint8_t i = 0; i < NUM_MEASURE_PINS; i++) {
+    measured_value = readCapacitivePin(&pin_setup_array[i]);
+    if (measured_value > pin_setup_array[i].calibration) {
+      if (i != active_pin_index) {
+        Serial.print("Start touch pin#"); Serial.print(i); Serial.print(" D"); Serial.println(pins2measure[i]);
+        active_pin_index = i;
+      }
+      break;
+    } else if (i == active_pin_index) {
+      Serial.print("End touch pin#"); Serial.print(i); Serial.print(" D"); Serial.println(pins2measure[i]);
+      active_pin_index = -1; // none touched now
+    } // end if
+  } // end for loop
+} // end handle_capacitive()
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
 // setup()
 void setup() {
   Serial.begin(115200);         // this serial communication is for general debug; set the USB serial port to 115,200 baud
@@ -314,21 +330,11 @@ void setup() {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // loop()
 void loop() {
-  uint8_t measured_value;
-  static int active_pin = -1; // none touched
-
-  // pay attention to the first pin touched
-  for (uint8_t i = 0; i < NUM_MEASURE_PINS; i++) {
-    measured_value = readCapacitivePin(&pin_setup_array[i]);
-    if (measured_value > pin_setup_array[i].calibration) {
-      if (i != active_pin) {
-        Serial.print("Start touch pin#"); Serial.print(i); Serial.print(" D"); Serial.println(pins2measure[i]);
-        active_pin = i;
-      }
-      break;
-    } else if (i == active_pin) {
-      Serial.print("End touch pin#"); Serial.print(i); Serial.print(" D"); Serial.println(pins2measure[i]);
-      active_pin = -1; // none touched now
-    } // end if
-  } // end for loop
+  EVERY_N_MILLISECONDS( 200 ) { gCurrentPatternNumber = handle_capacitive(); }
+  if ((gCurrentPatternNumber != -1) && (gPrevPattern != gCurrentPatternNumber)) {
+    gPrevPattern = gCurrentPatternNumber;
+    gPatternNumberChanged = 1;
+    DFstartSound(gCurrentPatternNumber+1, SOUND_DEFAULT_VOL);
+  } // end if
+  DFcheckSoundDone();
 } // end loop()
