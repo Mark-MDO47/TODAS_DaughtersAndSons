@@ -388,7 +388,7 @@ void loop() {
         gPrevPinIndex = gCurrentPinIndex;
         DFstartSound(pin2soundnum(gCurrentPinIndex), SOUND_DEFAULT_VOL);
       } else {
-        // PinIndex is -1 so we no key is held down - start silence sound
+        // PinIndex is -1 so no key is held down - start silence sound
         gCurrentPinIndex = gPrevPinIndex = -1;
         DFstartSound(pin2soundnum(gCurrentPinIndex), SOUND_DEFAULT_VOL);
     } // end if
