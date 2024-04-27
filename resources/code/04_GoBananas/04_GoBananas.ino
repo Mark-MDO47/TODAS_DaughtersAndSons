@@ -281,11 +281,6 @@ void DFsetup() {
   delay(1000); // allow DFPlayer to stabilize
   Serial.println(F("DFPlayer Mini online."));
 
-  // play the INTRO sound to completion, then allow normal loop() processing
-  DFstartSound(SOUNDNUM_INTRO, SOUND_DEFAULT_VOL);
-  while (!DFcheckSoundDone()) {
-    delay(10); // wait for the INTRO sound to finish
-  } // end while
 } // end DFsetup()
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -367,14 +362,21 @@ void setup() {
   }
   Serial.println(""); // print a blank line in case there is some junk from power-on
 
+  CapacitiveSetup();
+
   pinMode(DPIN_AUDIO_BUSY,  INPUT_PULLUP); // HIGH when audio stops
   mySoftwareSerial.begin(9600); // this is control to DFPlayer audio player
   // initialize the YX5200 DFPlayer audio player
   DFsetup();
 
-  CapacitiveSetup();
-
   Serial.println("TODAS init complete...");
+
+  // play the INTRO sound to completion, then allow normal loop() processing
+  DFstartSound(SOUNDNUM_INTRO, SOUND_DEFAULT_VOL);
+  while (!DFcheckSoundDone()) {
+    delay(10); // wait for the INTRO sound to finish
+  } // end while
+
 } // end setup()
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
