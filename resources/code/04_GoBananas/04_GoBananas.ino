@@ -107,9 +107,8 @@ uint32_t gTimerForceSoundActv = 0;  // SOUND_ACTIVE_PROTECT until millis() >= th
 //   -1 means nothing selected
 //   0-3 (3 = NUM_MEASURE_PINS-1) represent pins MEASURE_PIN_01 to MEASURE_PIN_03,
 //   any other value is invalid
-int8_t gCurrentPinIndex = -1; // Index number of which pin is current - nothing selected
-int8_t gPrevPinIndex = -1; // previous pattern number - nothing selected
-uint8_t gPinIndexChanged = 0; // non-zero if need to change pattern number
+int8_t gCurrentPinIndex = -1; // Index number of which PinIndex is current - nothing selected
+int8_t gPrevPinIndex = -1; // previous PinIndex - nothing selected
 
 // "pin index" to sound mapping
 //    pin index goes from -1 to 3 (3 = NUM_MEASURE_PINS-1)
@@ -189,7 +188,7 @@ uint16_t pin2soundnum(int8_t pinIndex) {
     Serial.print("ERROR pin2soundnum() - pinIndex="); Serial.print(pinIndex); Serial.println(" INVALID");
     soundNum = SOUNDNUM_INVALID; // not really needed
   }
-  return(pinIndex);
+  return(soundNum);
 } // end pin2soundnum()
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -396,7 +395,7 @@ void loop() {
         DFstartSound(pin2soundnum(gCurrentPinIndex), SOUND_DEFAULT_VOL);
       } else {
         // PinIndex is -1 so no key is held down - start silence sound
-        gCurrentPinIndex = gPrevPinIndex = -1;
+        gPrevPinIndex = -1;
         DFstartSound(pin2soundnum(gCurrentPinIndex), SOUND_DEFAULT_VOL);
     } // end if
   } // end EVERY_N_MILLISECONDS
