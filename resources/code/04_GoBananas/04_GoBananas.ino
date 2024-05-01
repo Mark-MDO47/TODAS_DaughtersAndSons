@@ -75,14 +75,14 @@ static pinsetup_t pin_setup_array[NUM_MEASURE_PINS];
 ////////////////////////////////////////////////////////////////////////////////////////
 // definitions for YX5200/DFPlayer and software serial
 
-#define DPIN_SWSRL_RX    4  // HW - serial in  - talk to DFPlayer audio player (YX5200)
-#define DPIN_SWSRL_TX    5  // HW - serial out - talk to DFPlayer audio player (YX5200)
-#define DPIN_AUDIO_BUSY  6  // HW - digital input - HIGH when audio finishes
+#define DPIN_SWSRL_RX    2  // HW - serial in  - talk to DFPlayer audio player (YX5200)
+#define DPIN_SWSRL_TX    3  // HW - serial out - talk to DFPlayer audio player (YX5200)
+#define DPIN_AUDIO_BUSY  4  // HW - digital input - HIGH when audio finishes
 SoftwareSerial mySoftwareSerial(/*rx =*/DPIN_SWSRL_RX, /*tx =*/DPIN_SWSRL_TX); // to talk to YX5200 audio player
               // SoftwareSerial(rxPin,                 txPin,       inverse_logic)
 DFRobotDFPlayerMini myDFPlayer;                                // to talk to YX5200 audio player
 void DFsetup();                                                // how to initialize myDFPlayer
-#define SOUND_DEFAULT_VOL     25  // default volume - 25 is pretty good
+#define SOUND_DEFAULT_VOL     30  // default volume - 25 is pretty good
 #define SOUND_BKGRND_VOL      20  // background volume
 #define SOUND_ACTIVE_PROTECT 200  // milliseconds to keep SW twiddled sound active after doing myDFPlayer.play(mySound)
 uint32_t gTimerForceSoundActv = 0;  // SOUND_ACTIVE_PROTECT until millis() >= this
@@ -344,6 +344,7 @@ int handle_capacitive() {
       active_pin_index = -1; // none touched now
     } // end if
   } // end for loop
+  return(active_pin_index);
 } // end handle_capacitive()
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -369,6 +370,9 @@ void setup() {
   while (!DFcheckSoundDone()) {
     delay(10); // wait for the INTRO sound to finish
   } // end while
+  Serial.println("Intro Sound Complete");
+  gCurrentPinIndex = gPrevPinIndex = -1;
+  DFstartSound(SOUNDNUM_silence, SOUND_DEFAULT_VOL);
 
 } // end setup()
 
@@ -381,14 +385,18 @@ void loop() {
       // "key" (PinIndex) is different than before so start a new sound
       //    -1 will start the silent sound, otherwise the chosen key sound will start
       gPrevPinIndex = gCurrentPinIndex;
+      // Serial.print("Start new PinIndex "); Serial.println(gCurrentPinIndex);
       DFstartSound(pin2soundnum(gCurrentPinIndex), SOUND_DEFAULT_VOL);
     } else if (DFcheckSoundDone()) {
+      // Serial.print("Sound Done ");
       if (gCurrentPinIndex >= 0) {
         // PinIndex is not -1 so we are still holding a key down - restart sound
         gPrevPinIndex = gCurrentPinIndex;
+        // Serial.print("Repeat PinIndex "); Serial.println(gCurrentPinIndex);
         DFstartSound(pin2soundnum(gCurrentPinIndex), SOUND_DEFAULT_VOL);
       } else {
         // PinIndex is -1 so no key is held down - start silence sound
+        // Serial.print("Silence PinIndex "); Serial.println(gCurrentPinIndex);
         gPrevPinIndex = -1;
         DFstartSound(pin2soundnum(gCurrentPinIndex), SOUND_DEFAULT_VOL);
     } // end if
