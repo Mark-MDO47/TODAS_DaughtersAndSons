@@ -55,6 +55,7 @@
 
 #include "SoftwareSerial.h"       // to talk to myDFPlayer without using up debug (HW) serial port
 #include "DFRobotDFPlayerMini.h"  // to communicate with the YX5200 audio player
+#include "04_GoBananas_SOUNDNUM.h"
 
 #include "04_readCapacitivePin.h" // modified https://playground.arduino.cc/Code/CapacitiveSensor/
 
@@ -81,13 +82,6 @@ SoftwareSerial mySoftwareSerial(/*rx =*/DPIN_SWSRL_RX, /*tx =*/DPIN_SWSRL_TX); /
               // SoftwareSerial(rxPin,                 txPin,       inverse_logic)
 DFRobotDFPlayerMini myDFPlayer;                                // to talk to YX5200 audio player
 void DFsetup();                                                // how to initialize myDFPlayer
-#define SOUNDNUM_INVALID 254 // invalid soundnum
-#define SOUNDNUM_INTRO   1   // our introduction sound - optional snippet of "Bananaphone" by Raffi
-#define SOUNDNUM_SILENCE 2   // the sound of silence
-#define SOUNDNUM_C       3   // simple musical tone "C"
-#define SOUNDNUM_D       4   // simple musical tone "D"
-#define SOUNDNUM_E       5   // simple musical tone "E"
-#define SOUNDNUM_F       6   // simple musical tone "F"
 #define SOUND_DEFAULT_VOL     25  // default volume - 25 is pretty good
 #define SOUND_BKGRND_VOL      20  // background volume
 #define SOUND_ACTIVE_PROTECT 200  // milliseconds to keep SW twiddled sound active after doing myDFPlayer.play(mySound)
@@ -115,7 +109,7 @@ int8_t gPrevPinIndex = -1; // previous PinIndex - nothing selected
 //    we add one to that number to go from 0 to 4
 //       0 = Silence sound
 //       1 through 4 = MEASURE_PIN_01 through MEASURE_PIN_04
-uint16_t gPinIndex2SoundNum[1+NUM_MEASURE_PINS] = { SOUNDNUM_SILENCE, SOUNDNUM_C, SOUNDNUM_D, SOUNDNUM_E, SOUNDNUM_F };
+uint16_t gPinIndex2SoundNum[1+NUM_MEASURE_PINS] = { SOUNDNUM_silence, SOUNDNUM_electric_piano_C, SOUNDNUM_organ_D, SOUNDNUM_boing_harp, SOUNDNUM_aaaoooogaaaa };
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 #if DFPRINTDETAIL
@@ -371,7 +365,7 @@ void setup() {
   Serial.println("TODAS init complete...");
 
   // play the INTRO sound to completion, then allow normal loop() processing
-  DFstartSound(SOUNDNUM_INTRO, SOUND_DEFAULT_VOL);
+  DFstartSound(SOUNDNUM_introduction, SOUND_DEFAULT_VOL);
   while (!DFcheckSoundDone()) {
     delay(10); // wait for the INTRO sound to finish
   } // end while
