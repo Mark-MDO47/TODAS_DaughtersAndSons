@@ -11,6 +11,7 @@
  * 
  * It uses the HC-SRO4 Ultrasonic Range Detector.
  * It uses a disk of 9 rings of WS2812B LEDs - 241 individually addressable RGB color LEDs
+ * By moving your hand closer to or further from the HC-SR04, you choose different LED pattern displays
  * 
  */
 
@@ -26,16 +27,6 @@
 #include <FastLED.h>
 #include <Ultrasonic.h>
 
-// How many leds in your strip?
-#define NUM_LEDS 241 // Mark-MDO47 number of WS2812B LEDs
-
-// For led chips like WS2812, which have a data line, ground, and power, you just
-// need to define DATA_PIN.  For led chipsets that are SPI based (four wires - data, clock,
-// ground, and power), like the LPD8806 define both DATA_PIN and CLOCK_PIN
-// Clock pin only needed for SPI based chipsets when not using hardware SPI
-#define DATA_PIN 7 // Mark-MDO47 we use pin 7 for LEDs
-// #define CLOCK_PIN 13 // Mark-MDO47 we don't use CLOCK_PIN with this LED Strip
-
 // Ultrasonic HC_SR04 definitions
 #define ULTRA_TRIG_PIN 12 // HC-SR04 Trigger digital pin
 #define ULTRA_ECHO_PIN 10 // HC-SR04 Trigger echo pin
@@ -46,6 +37,17 @@
 Ultrasonic my_ultra = Ultrasonic(ULTRA_TRIG_PIN, ULTRA_ECHO_PIN); // default timeout is 20 milliseconds
 
 // Mark-MDO47 FastLED definitions
+
+// How many leds in your strip?
+#define NUM_LEDS 241 // Mark-MDO47 number of WS2812B LEDs
+
+// For led chips like WS2812, which have a data line, ground, and power, you just
+// need to define DATA_PIN.  For led chipsets that are SPI based (four wires - data, clock,
+// ground, and power), like the LPD8806 define both DATA_PIN and CLOCK_PIN
+// Clock pin only needed for SPI based chipsets when not using hardware SPI
+#define DATA_PIN 7 // Mark-MDO47 we use pin 7 for LEDs
+// #define CLOCK_PIN 13 // Mark-MDO47 we don't use CLOCK_PIN with this LED Strip
+
 #define BRIGHTMAX 40 // set to 250 for MUCH brighter
 #define FRAMES_PER_SECOND 120
 
@@ -136,7 +138,7 @@ int handle_ultra() {
   int ultra_dist;
   
   gUltraDistance= (my_ultra.read(CM));
-    ultra_dist = gUltraDistance - ULTRA_IGNORE_INITIAL_CM;
+  ultra_dist = gUltraDistance - ULTRA_IGNORE_INITIAL_CM;
   if (ultra_dist < 0) ultra_dist = 0;
   pattern = ultra_dist / ULTRA_CM_PER_REGION;
   if (pattern > 5) pattern = 5;
