@@ -385,18 +385,14 @@ void loop() {
       // "key" (PinIndex) is different than before so start a new sound
       //    -1 will start the silent sound, otherwise the chosen key sound will start
       gPrevPinIndex = gCurrentPinIndex;
-      // Serial.print("Start new PinIndex "); Serial.println(gCurrentPinIndex);
       DFstartSound(pin2soundnum(gCurrentPinIndex), SOUND_DEFAULT_VOL);
     } else if (DFcheckSoundDone()) {
-      // Serial.print("Sound Done ");
       if (gCurrentPinIndex >= 0) {
         // PinIndex is not -1 so we are still holding a key down - restart sound
         gPrevPinIndex = gCurrentPinIndex;
-        // Serial.print("Repeat PinIndex "); Serial.println(gCurrentPinIndex);
         DFstartSound(pin2soundnum(gCurrentPinIndex), SOUND_DEFAULT_VOL);
       } else {
         // PinIndex is -1 so no key is held down - start silence sound
-        // Serial.print("Silence PinIndex "); Serial.println(gCurrentPinIndex);
         gPrevPinIndex = -1;
         DFstartSound(pin2soundnum(gCurrentPinIndex), SOUND_DEFAULT_VOL);
     } // end if
