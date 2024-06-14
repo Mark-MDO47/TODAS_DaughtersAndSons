@@ -18,17 +18,19 @@
 // Nano pin GND     LEDstick GND
 // Nano pin D-7     LEDstick DIN
 //
-// Nano pin D-3     Button - press to stop action
+// Nano pin D-3     Button - press to choose FAST_INTERVAL timing
 
 #include <FastLED.h>
 
 // CUSTOMIZATION CHOICES
-long gInterval = 100;           // interval at which to blink (milliseconds)
+
+#define SLOW_INTERVAL 100 // button NOT pressed interval at which to blink (milliseconds)
+#define FAST_INTERVAL 15  // button PRESSED interval at which to blink (milliseconds)
 CRGB gTheColorList[] = { CRGB::Red, CRGB::Green, CRGB::Blue };
 
 // PIN definitions
 
-#define BUTTON_PIN_STOP 3 // press to stop action; release to restart
+#define BUTTON_PIN 3 // press to press for FAST_INTERVAL timing; release for SLOW_INTERVAL
 
 // For led chips like WS2812, which have a data line, ground, and power, you just
 // need to define DATA_PIN.  For led chipsets that are SPI based (four wires - data, clock,
@@ -85,19 +87,16 @@ void step_color_value() {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ptrn_phase() - determine the state of the phase of pattern generation
 //    returns: long int with either value >= 0 phase to blink or value < 0 STOP
+// NOTE: code that calls us would stop if we returned -1 but we don't do that
 //
 
 long int ptrn_phase() {
   static long int current_phase = -1;
 
-  if (HIGH == digitalRead(BUTTON_PIN_STOP)) {
-    current_phase += 1;
-    current_phase %= gPatternsRepeat; // loop through the number of calls before repeat
-    if (0 == current_phase) {
-      step_color_value();
-    }
-  } else {
-    current_phase = -1; // STOP
+  current_phase += 1;
+  current_phase %= gPatternsRepeat; // loop through the number of calls before repeat
+  if (0 == current_phase) {
+    step_color_value();
   }
   
   return(current_phase);
@@ -140,7 +139,7 @@ void setup() {
   }
   while (Serial.available()) Serial.read(); // clear any startup junk from the serial queue
 
-  pinMode(BUTTON_PIN_STOP, INPUT_PULLUP); // digital INPUT_PULLUP means voltage HIGH unless grounded
+  pinMode(BUTTON_PIN, INPUT_PULLUP); // digital INPUT_PULLUP means voltage HIGH unless grounded
 
   // ## Clockless types ##
   FastLED.addLeds<NEOPIXEL, DATA_PIN>(fastled_array, NUM_LEDS);  // GRB ordering is assumed
@@ -161,8 +160,15 @@ void loop() {
   // between the current time and last time you blinked the LED is bigger than
   // the interval at which you want to blink the LED.
   unsigned long currentMillis = millis();
+  unsigned long interval;    // interval at which to blink (milliseconds)
 
-  if (currentMillis - previousMillis >= gInterval) {
+  if (HIGH == digitalRead(BUTTON_PIN)) {
+    interval = SLOW_INTERVAL;
+  } else {
+    interval = FAST_INTERVAL;
+  }
+
+  if (currentMillis - previousMillis >= interval) {
     // save the last time you blinked the LED
     previousMillis = currentMillis;
     // generate pattern to display and display it
