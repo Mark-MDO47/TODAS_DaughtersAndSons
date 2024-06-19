@@ -1,9 +1,10 @@
-# TODAS_DaughtersAndSons
-Take our Daughters and Sons to Work Day June 2024
+# BAC2WD_ArduinoExperience
+Bring a Child to Work Day June 2024
+- Previously "Take our Daughters and Sons to Work Day"
 
-At work we are having a take a child to work day and I will be running an Arduino table with a target age range of 9-16 and a time range for each group of one hour.
+At work we are having a bring a child to work day and I will be running an Arduino Experience table with a target age range of 9-16 and a time range for each group of one hour.
 
-See https://github.com/Mark-MDO47/TODAS_DaughtersAndSons/blob/master/TODAS_DaughtersAndSons.pdf for details
+See https://github.com/Mark-MDO47/TODAS_DaughtersAndSons/blob/master/BAC2WD_ArduinoExperience.pdf for details
 
 My initial plan is
 - use Arduinos and breadboards
