@@ -27,9 +27,8 @@ My initial plan is
 - have some other arduino projects to show, such as
   - Persistence of Vision - https://github.com/Mark-MDO47/ArduinoClass/tree/master/02_PersistenceOfVision
   - Rubber Band Gun - https://github.com/Mark-MDO47/RubberBandGun
-  - Graduation Caps - https://github.com/Mark-MDO47/GraduationCap2017
   - Version 0.1 of the Halloween Skull with Eyeballs - https://github.com/Mark-MDO47/HalloweenEyes
-  - Voice controlled Christmas tree lights - https://github.com/Mark-MDO47/ArduinoClass/blob/master/FablabChristmasArduinoTable_2023.pdf
+  - Demo of editing TFT666 round display - https://github.com/Mark-MDO47/expt_AdaFruit_TTL666_display
 
 # Parts List
 | Project | Part | Recent Approx. Price | Source |
