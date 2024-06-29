@@ -31,27 +31,27 @@ My initial plan is
   - Demo of editing TFT666 round display - https://github.com/Mark-MDO47/expt_AdaFruit_TTL666_display
 
 # Parts List
-| Project | Part | Recent Approx. Price | Source |
-| --- | --- | --- | --- |
-| 1, 2, 3, 4 | Solderless Breadboard | $2 | protosupplies.com |
-| 1, 2 | Button | ~ $0.10 | amazon.com |
-| 1, 2, 3 | 200 Ohm resistor | ~ $0.10 | digikey.com |
-| 1 | LED | ~ $0.10 | amazon.com |
-| 1, 2, 3, 4 | Wires, clips, etc. | N/A | misc |
-| *** | *** | *** | *** |
-| 2, 3, 4 | Arduino Nano | $3 | aliexpress.com |
-| 2 | WS2812B RGB 8-LED Strip | $2 | protosupplies.com |
-| *** | *** | *** | *** |
-| 3 | HC-SR04 Sonar Range Detector | $2 | protosupplies.com |
-| 3 | WS2812B RGB 241-LED Disk  | $26 | amazon.com |
-| 3 | Button top 18650 Rechargeable Batteries | $4 each | amazon.com |
-| 3 | 18650 Battery Holder | $1 | amazon.com |
-| 3 | UBEC (Universal Battery Eliminator Circuit) 3-Amp | $5 | amazon.com |
-| *** | *** | *** | *** |
-| 4 | 1K Ohm resistor, 1/4 watt | $1 | digikey.com |
-| 4 | YX5200/DFPlayer sound player | $3 | amazon.com / dfrobot.com |
-| 4 | SD or TF Card w/o adapter | $5 | amazon.com |
-| 4 | Small speaker| $2 | amazon.com |
-| 4 | Bananas, apples, grapes, tomatoes, aluminum foil | N/A | misc |
-| 4 | Bananaphone by Raffi (Music Download) (optional) | $10 | amazon.com |
+| Project | Part | Recent Approx. Price | Possible Source | Possible URL |
+| --- | --- | --- | --- | --- |
+| 1, 2, 3, 4 | Solderless Breadboard | $2 | protosupplies.com | **hobby ->** https://protosupplies.com/product/breadboard-mb102-400-tie-points **pro ->** https://protosupplies.com/product/solderless-breadboard-400-pro-series |
+| 1, 2 | Button | ~ $0.10 | amazon.com | **many ->** https://www.amazon.com/gp/product/B07C7211PJ |
+| 1, 2, 3 | 200 Ohm resistor | ~ $0.10 | digikey.com | https://www.digikey.com/en/products/detail/stackpole-electronics-inc/RNMF14FTC200R/2617310 |
+| 1 | LED | ~ $0.10 | amazon.com | **many ->** https://www.amazon.com/MCIGICM-Circuit-Assorted-Science-Experiment/dp/B07PG84V17 |
+| 1, 2, 3, 4 | Wires, clips, etc. | N/A | misc | **4 inch ->** https://www.amazon.com/gp/product/B07GJ9FLXY **12 inch ->** https://www.amazon.com/gp/product/B07GK179G5 |
+| *** | *** | *** | *** | *** |
+| 2, 3, 4 | Arduino Nano | $3 | aliexpress.com |  |
+| 2 | WS2812B RGB 8-LED Strip | $2 | protosupplies.com |  |
+| *** | *** | *** | *** | *** |
+| 3 | HC-SR04 Sonar Range Detector | $2 | protosupplies.com |  |
+| 3 | WS2812B RGB 241-LED Disk  | $26 | amazon.com |  |
+| 3 | Button top 18650 Rechargeable Batteries | $4 each | amazon.com |  |
+| 3 | 18650 Battery Holder | $1 | amazon.com |  |
+| 3 | UBEC (Universal Battery Eliminator Circuit) 3-Amp | $5 | amazon.com |  |
+| *** | *** | *** | *** | *** |
+| 4 | 1K Ohm resistor, 1/4 watt | $1 | digikey.com |  |
+| 4 | YX5200/DFPlayer sound player | $3 | amazon.com / dfrobot.com |  |
+| 4 | SD or TF Card w/o adapter | $5 | amazon.com |  |
+| 4 | Small speaker| $2 | amazon.com |  |
+| 4 | Bananas, apples, grapes, tomatoes, aluminum foil | N/A | misc |  |
+| 4 | Bananaphone by Raffi (Music Download) (optional) | $10 | amazon.com |  |
 
