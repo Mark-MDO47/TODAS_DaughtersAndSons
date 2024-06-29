@@ -39,17 +39,17 @@ My initial plan is
 | 1 | LED | ~ $0.10 | amazon.com | **many ->** https://www.amazon.com/MCIGICM-Circuit-Assorted-Science-Experiment/dp/B07PG84V17 |
 | 1, 2, 3, 4 | Wires, clips, etc. | N/A | misc | **4 inch ->** https://www.amazon.com/gp/product/B07GJ9FLXY **12 inch ->** https://www.amazon.com/gp/product/B07GK179G5 |
 | *** | *** | *** | *** | *** |
-| 2, 3, 4 | Arduino Nano | $3 | aliexpress.com |  |
-| 2 | WS2812B RGB 8-LED Strip | $2 | protosupplies.com |  |
+| 2, 3, 4 | Arduino Nano | $3 | aliexpress.com | **Mini USB welding + Nano Cable ->** https://www.aliexpress.us/item/2255800392785775.html?spm=a2g0o.order_list.order_list_main.5.36f91802YV7UiP&gatewayAdapt=glo2usa |
+| 2 | WS2812B RGB 8-LED Strip | $1.29 | protosupplies.com | https://protosupplies.com/product/ws2812-addressable-rgb-led-stick-module/ |
 | *** | *** | *** | *** | *** |
-| 3 | HC-SR04 Sonar Range Detector | $2 | protosupplies.com |  |
-| 3 | WS2812B RGB 241-LED Disk  | $26 | amazon.com |  |
-| 3 | Button top 18650 Rechargeable Batteries | $4 each | amazon.com |  |
-| 3 | 18650 Battery Holder | $1 | amazon.com |  |
-| 3 | UBEC (Universal Battery Eliminator Circuit) 3-Amp | $5 | amazon.com |  |
+| 3 | HC-SR04 Sonar Range Detector | $2 | protosupplies.com | https://protosupplies.com/product/hc-sr04-ultrasonic-range-finder-module/ |
+| 3 | WS2812B RGB 241-LED Disk  | $26 | amazon.com | https://www.amazon.com/gp/product/B083VWVP3J |
+| 3 | Button top 18650 Rechargeable Batteries with charger | $5 each | amazon.com | **4-pack for $20 ->** https://www.amazon.com/4-Bay-Charger-Universal-W%EF%BF%B5i%EF%BF%B5th-9900mAh/dp/B0B6R3C8FY |
+| 3 | 18650 Battery Holder 3-slot | $2.50 each | amazon.com | **4-pack for $10 ->** https://www.amazon.com/11-1V-18650-Battery-Holder-Spring/dp/B09TTJQNLY |
+| 3 | UBEC (Universal Battery Eliminator Circuit) 3-Amp | $10 | amazon.com | https://www.amazon.com/Ship-Hobbywing-Switch-mode-UBEC-Lowest/dp/B008ZNWOYY |
 | *** | *** | *** | *** | *** |
-| 4 | 1K Ohm resistor, 1/4 watt | $1 | digikey.com |  |
-| 4 | YX5200/DFPlayer sound player | $3 | amazon.com / dfrobot.com |  |
+| 4 | 1K Ohm resistor, 1/4 watt | $0.10 | digikey.com | https://www.digikey.com/en/products/detail/stackpole-electronics-inc/CF14JT1K00/1741314 |
+| 4 | YX5200/DFPlayer sound player | $3 | amazon.com / dfrobot.com | **5 for $12 clone ->** https://www.amazon.com/gp/product/B07JGWMPTF **1 for $6 ->** https://www.dfrobot.com/product-1121.html |
 | 4 | SD or TF Card w/o adapter | $5 | amazon.com |  |
 | 4 | Small speaker| $2 | amazon.com |  |
 | 4 | Bananas, apples, grapes, tomatoes, aluminum foil | N/A | misc |  |
