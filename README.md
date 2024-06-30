@@ -4,6 +4,10 @@ Bring a Child to Work Day June 2024
 
 At work we are having a bring a child to work day and I will be running an Arduino Experience table with a target age range of 9-16 and a time range for each group of one hour.
 
+| 03 Sonar Control | 04 Banana Piano |
+| --- | --- |
+| ![alt text](https://github.com/Mark-MDO47/TODAS_DaughtersAndSons/blob/master/resources/images/03_SonarControlSetup.jpg "Setup for project 03 Sonar Control") | ![alt text](https://github.com/Mark-MDO47/TODAS_DaughtersAndSons/blob/master/resources/images/04_BananaPianoSetup.png "Setup for project 04 Banana Piano") |
+
 See https://github.com/Mark-MDO47/TODAS_DaughtersAndSons/blob/master/BAC2WD_ArduinoExperience.pdf for details
 
 My initial plan is
