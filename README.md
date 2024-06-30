@@ -33,11 +33,11 @@ My initial plan is
 # Parts List
 | Project | Part | Recent Approx. Price | Possible Source | Possible URL |
 | --- | --- | --- | --- | --- |
-| 1, 2, 3, 4 | Solderless Breadboard | $2 | protosupplies.com | **hobby ->** https://protosupplies.com/product/breadboard-mb102-400-tie-points **pro ->** https://protosupplies.com/product/solderless-breadboard-400-pro-series |
+| 1, 2, 3, 4 | Solderless Breadboard | $2 | protosupplies.com | **hobby ->** https://protosupplies.com/product/breadboard-mb102-400-tie-points<br>**pro ->** https://protosupplies.com/product/solderless-breadboard-400-pro-series |
 | 1, 2 | Button | ~ $0.10 | amazon.com | **many ->** https://www.amazon.com/gp/product/B07C7211PJ |
 | 1, 2, 3 | 200 Ohm resistor | ~ $0.10 | digikey.com | https://www.digikey.com/en/products/detail/stackpole-electronics-inc/RNMF14FTC200R/2617310 |
 | 1 | LED | ~ $0.10 | amazon.com | **many ->** https://www.amazon.com/MCIGICM-Circuit-Assorted-Science-Experiment/dp/B07PG84V17 |
-| 1, 2, 3, 4 | Wires, clips, etc. | N/A | misc | **4 inch ->** https://www.amazon.com/gp/product/B07GJ9FLXY **12 inch ->** https://www.amazon.com/gp/product/B07GK179G5 |
+| 1, 2, 3, 4 | Wires, clips, etc. | N/A | misc | **4 inch ->** https://www.amazon.com/gp/product/B07GJ9FLXY<br>**12 inch ->** https://www.amazon.com/gp/product/B07GK179G5 |
 | *** | *** | *** | *** | *** |
 | 2, 3, 4 | Arduino Nano | $3 | aliexpress.com | **Mini USB welding + Nano Cable ->** https://www.aliexpress.us/item/2255800392785775.html?spm=a2g0o.order_list.order_list_main.5.36f91802YV7UiP&gatewayAdapt=glo2usa |
 | 2 | WS2812B RGB 8-LED Strip | $1.29 | protosupplies.com | https://protosupplies.com/product/ws2812-addressable-rgb-led-stick-module/ |
@@ -49,7 +49,7 @@ My initial plan is
 | 3 | UBEC (Universal Battery Eliminator Circuit) 3-Amp | $10 | amazon.com | https://www.amazon.com/Ship-Hobbywing-Switch-mode-UBEC-Lowest/dp/B008ZNWOYY |
 | *** | *** | *** | *** | *** |
 | 4 | 1K Ohm resistor, 1/4 watt | $0.10 | digikey.com | https://www.digikey.com/en/products/detail/stackpole-electronics-inc/CF14JT1K00/1741314 |
-| 4 | YX5200/DFPlayer sound player | $3 | amazon.com / dfrobot.com | **5 for $12 clone ->** https://www.amazon.com/gp/product/B07JGWMPTF **1 for $6 ->** https://www.dfrobot.com/product-1121.html |
+| 4 | YX5200/DFPlayer sound player | $3 | amazon.com / dfrobot.com | **5-pack for $12 clone ->** https://www.amazon.com/gp/product/B07JGWMPTF<br>**1 for $6 ->** https://www.dfrobot.com/product-1121.html |
 | 4 | SD or TF Card w adapter | $5 each | amazon.com | **2-pack for $10 32GB ->** https://www.amazon.com/Micro-Center-Class-Memory-Adapter/dp/B07K81Z6DF |
 | 4 | Small speaker| $2.77 each | amazon.com | **4-pack for $11.07 ->** https://www.amazon.com/gp/product/B0177ABRQ6 |
 | 4 | Bananas, apples, grapes, tomatoes, aluminum foil | N/A | misc | grocery store |
