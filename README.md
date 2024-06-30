@@ -32,7 +32,6 @@ My initial plan is
   - Persistence of Vision - https://github.com/Mark-MDO47/ArduinoClass/tree/master/02_PersistenceOfVision
   - Rubber Band Gun - https://github.com/Mark-MDO47/RubberBandGun
   - Version 0.1 of the Halloween Skull with Eyeballs - https://github.com/Mark-MDO47/HalloweenEyes
-  - Demo of editing TFT666 round display - https://github.com/Mark-MDO47/expt_AdaFruit_TTL666_display
 
 # Parts List
 **NOTE:** Possible Sources and Possible URLs for information only. All prices approximate as of 2024-06-29.
