@@ -31,7 +31,7 @@ My initial plan is
   - Demo of editing TFT666 round display - https://github.com/Mark-MDO47/expt_AdaFruit_TTL666_display
 
 # Parts List
-**NOTE:** Possible Sources and Possible URLs for information only.
+**NOTE:** Possible Sources and Possible URLs for information only. All prices approximate as of 2024-06-29.
 
 | Project | Part | Recent Approx. Price | Possible Source | Possible URL |
 | --- | --- | --- | --- | --- |
