@@ -31,6 +31,8 @@ My initial plan is
   - Demo of editing TFT666 round display - https://github.com/Mark-MDO47/expt_AdaFruit_TTL666_display
 
 # Parts List
+**NOTE:** Possible Sources and Possible URLs for information only.
+
 | Project | Part | Recent Approx. Price | Possible Source | Possible URL |
 | --- | --- | --- | --- | --- |
 | 1, 2, 3, 4 | Solderless Breadboard | $2 | protosupplies.com | **hobby ->** https://protosupplies.com/product/breadboard-mb102-400-tie-points<br>**pro ->** https://protosupplies.com/product/solderless-breadboard-400-pro-series |
