@@ -50,8 +50,8 @@ My initial plan is
 | *** | *** | *** | *** | *** |
 | 4 | 1K Ohm resistor, 1/4 watt | $0.10 | digikey.com | https://www.digikey.com/en/products/detail/stackpole-electronics-inc/CF14JT1K00/1741314 |
 | 4 | YX5200/DFPlayer sound player | $3 | amazon.com / dfrobot.com | **5 for $12 clone ->** https://www.amazon.com/gp/product/B07JGWMPTF **1 for $6 ->** https://www.dfrobot.com/product-1121.html |
-| 4 | SD or TF Card w/o adapter | $5 | amazon.com |  |
-| 4 | Small speaker| $2 | amazon.com |  |
-| 4 | Bananas, apples, grapes, tomatoes, aluminum foil | N/A | misc |  |
-| 4 | Bananaphone by Raffi (Music Download) (optional) | $10 | amazon.com |  |
+| 4 | SD or TF Card w adapter | $5 each | amazon.com | **2-pack for $10 32GB ->** https://www.amazon.com/Micro-Center-Class-Memory-Adapter/dp/B07K81Z6DF |
+| 4 | Small speaker| $2.77 each | amazon.com | **4-pack for $11.07 ->** https://www.amazon.com/gp/product/B0177ABRQ6 |
+| 4 | Bananas, apples, grapes, tomatoes, aluminum foil | N/A | misc | grocery store |
+| 4 | Bananaphone by Raffi (Music Download) (optional) | $10 | amazon.com | https://www.amazon.com/gp/product/B005G6Q3AE |
 
