@@ -51,7 +51,7 @@ My initial plan is
 | 3 | WS2812B RGB 241-LED Disk  | $26 | amazon.com | https://www.amazon.com/gp/product/B083VWVP3J |
 | 3 | Button top 18650 Rechargeable Batteries with charger | $5 each | amazon.com | **4-pack for $20 ->** https://www.amazon.com/4-Bay-Charger-Universal-W%EF%BF%B5i%EF%BF%B5th-9900mAh/dp/B0B6R3C8FY |
 | 3 | 18650 Battery Holder 3-slot | $2.50 each | amazon.com | **4-pack for $10 ->** https://www.amazon.com/11-1V-18650-Battery-Holder-Spring/dp/B09TTJQNLY |
-| 3 | UBEC (Universal Battery Eliminator Circuit) 3-Amp | $10 | amazon.com | https://www.amazon.com/Ship-Hobbywing-Switch-mode-UBEC-Lowest/dp/B008ZNWOYY |
+| 3 | UBEC (Universal Battery Eliminator Circuit) 3-Amp | $10 | amazon.com | **$10 ->** https://www.amazon.com/Ship-Hobbywing-Switch-mode-UBEC-Lowest/dp/B008ZNWOYY<br>**$2 ->** https://www.aliexpress.us/item/3256805749908818.html |
 | *** | *** | *** | *** | *** |
 | 4 | 1K Ohm resistor, 1/4 watt | $0.10 | digikey.com | https://www.digikey.com/en/products/detail/stackpole-electronics-inc/CF14JT1K00/1741314 |
 | 4 | YX5200/DFPlayer sound player | $3 | amazon.com / dfrobot.com | **5-pack for $12 clone ->** https://www.amazon.com/gp/product/B07JGWMPTF<br>**1 for $6 ->** https://www.dfrobot.com/product-1121.html |
